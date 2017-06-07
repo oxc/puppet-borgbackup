@@ -1,0 +1,16 @@
+{
+  "name": "oxc-borgbackup",
+  "version": "0.1.0",
+  "author": "oxc",
+  "summary": "Installs and manages borgbackup backup system",
+  "license": "Apache-2.0",
+  "source": "https://github.com/oxc/puppet-borgbackup",
+  "project_page": "https://github.com/oxc/puppet-borgbackup",
+  "issues_url": "https://github.com/oxc/puppet-borgbackup/issues",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"},
+    {"name":"puppetlabs-concat","version_requirement":">= 3.0.0"}
+  ],
+  "data_provider": null
+}
+

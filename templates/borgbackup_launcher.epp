@@ -1,0 +1,75 @@
+<%- | $repository, $ssh_identity, $paths, $archive_name, $excludes, $retention_policy, $prune_prefix, $borg_init_options, $borg_create_options, $borg_prune_options | -%>
+#!/bin/sh
+# 
+# THIS FILE IS MANAGED BY PUPPET. DO NOT MODIFY.
+#
+set -e
+
+export BORG_REPO="<%= $repository[url] %>"
+export BORG_PASSPHRASE="<%= $repository[passphrase] %>"
+
+<% if $ssh_identity { -%>
+export BORG_RSH="ssh -i <%= $ssh_identity %>"
+<% } -%>
+
+borg_create_options=""
+borg_prune_options=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+  -n|--dry-run)
+    borg_create_options="${borg_create_options} --dry-run"
+    borg_prune_options="${borg_prune_options} --dry-run"
+    ;;
+  -v|--verbose)
+    borg_create_options="${borg_create_options} --verbose --list --stats"
+    borg_prune_options="${borg_prune_options} --verbose --list --stats"
+    ;;
+  -p|--progress)
+    borg_create_options="${borg_create_options} --progress"
+    ;;
+  -*)
+    echo "Unknown option $1" >&2
+    exit 1
+    ;;
+  *)
+    echo "$0 takes no arguments (got $1)" >&2
+    exit 1
+    ;;
+  esac
+  shift
+done
+
+# init if necessary
+if ! borg list > /dev/null; then
+  borg init --encryption <%= $repository[encryption] %>
+fi
+
+# create backup archive
+borg create ::<%= $archive_name %> \
+<% $excludes.each |$pattern| { -%>
+  --exclude '<%= $pattern %>' \
+<% } -%>
+<% $borg_create_options.each |$key, $value| { -%>
+<%   case $value {
+       true: { %>--<%= $key %> \
+<%     }
+       default: { %>--<%= $key -%> '<%= $value %>' \
+<%     }
+     } -%>
+<% } -%>
+<% $paths.each |$path| { -%>
+  <%= $path %> \
+<% } -%>
+  ${borg_create_options}
+
+<% if $retention_policy { -%>
+# prune
+borg prune \
+<% if $prune_prefix { -%>
+  --prefix '<%= $prune_prefix -%>' \
+<% } -%>
+<% $retention_policy.each |$keep, $value| { -%>
+  --keep-<%= $keep %> '<%= $value -%>' \
+<% } -%>
+  ${borg_prune_options}
+<% } -%>

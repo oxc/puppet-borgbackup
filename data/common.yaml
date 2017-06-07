@@ -1,0 +1,4 @@
+borgbackup::job::config_dir: /etc/borgbackup
+borgbackup::job::launcher_dir: "%{lookup('borgbackup::job::config_dir')}/job.d"
+borgbackup::job::borgbackup_command: borg
+
