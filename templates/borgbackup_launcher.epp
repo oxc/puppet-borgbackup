@@ -12,6 +12,12 @@ export BORG_PASSPHRASE="<%= $repository[passphrase] %>"
 export BORG_RSH="ssh -i <%= $ssh_identity %>"
 <% } -%>
 
+# allow calling borg commands directly
+if [ "$1" = "cmd" ]; then
+  shift
+  exec borg "$@"
+fi
+
 borg_create_options=""
 borg_prune_options=""
 while [ $# -gt 0 ]; do
