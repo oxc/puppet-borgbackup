@@ -7,14 +7,14 @@
 # @author Bernhard Frauendienst <puppet@nospam.obeliks.de>
 #
 define borgbackup::job (
-  String $archive_name                              = "${title}-{fqdn}-{now}",
   Variant[String, Array[String]] $path,
-  Optional[Variant[String, Array[String]]] $exclude = undef,
   Struct[{
     url                  => String,
     Optional[passphrase] => String,
     Optional[encryption] => Enum['none', 'repokey', 'keyfile'],
   }] $repository,
+  String $archive_name                              = "${title}-{fqdn}-{now}",
+  Optional[Variant[String, Array[String]]] $exclude = undef,
   Optional[String] $ssh_identity                    = undef,
   Optional[Struct[{
     Optional[within] => String,
