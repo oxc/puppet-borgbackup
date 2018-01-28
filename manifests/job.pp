@@ -37,17 +37,17 @@ define borgbackup::job (
   $launcher_file = "${launcher_dir}/${name}.sh"
 
   file { $launcher_file:
-    owner   => 'root',
+    ensure  => $ensure,
     group   => 'root',
     mode    => '0550',
-    ensure  => $ensure,
+    owner   => 'root',
     content => epp('borgbackup/borgbackup_launcher.epp', {
-      paths        => any2array($path),
-      archive_name => $archive_name,
-      excludes     => any2array($exclude),
-      repository   => $repository,
-      ssh_identity => $ssh_identity,
-      prune_prefix => $prune_prefix,
+      paths               => any2array($path),
+      archive_name        => $archive_name,
+      excludes            => any2array($exclude),
+      repository          => $repository,
+      ssh_identity        => $ssh_identity,
+      prune_prefix        => $prune_prefix,
       retention_policy    => $retention_policy,
       borg_init_options   => {},
       borg_create_options => {},

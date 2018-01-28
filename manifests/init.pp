@@ -30,19 +30,19 @@ class borgbackup (
   if ($config_dir) {
     file { $config_dir:
       ensure => 'directory',
-      owner => 'root',
-      group => 'root',
+      owner  => 'root',
+      group  => 'root',
       before => File[$launcher_dir],
-    }  
+    }
   }
 
   $launcher_dir = lookup('borgbackup::job::launcher_dir')
   file { $launcher_dir:
-    ensure => 'directory',
+    ensure  => 'directory',
     recurse => $purge_unmanaged,
-    purge => $purge_unmanaged,
+    purge   => $purge_unmanaged,
   }
 
-  create_resources("borgbackup::job", $jobs)
-  create_resources("borgbackup::cron", $crons)
+  create_resources('borgbackup::job', $jobs)
+  create_resources('borgbackup::cron', $crons)
 }

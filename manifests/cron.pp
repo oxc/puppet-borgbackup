@@ -17,9 +17,9 @@ define borgbackup::cron (
 ) {
   $command = join(any2array($jobs).map |$job| { "${launcher_dir}/${job}.sh" }, ' && ')
 
-  cron { "borgbackup cron ${title}": 
-    command  => $command,
+  cron { "borgbackup cron ${title}":
     ensure   => $ensure,
+    command  => $command,
     hour     => $hour,
     minute   => $minute,
     month    => $month,
