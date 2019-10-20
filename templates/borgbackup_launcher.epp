@@ -51,7 +51,7 @@ if ! borg list > /dev/null; then
 fi
 
 # create backup archive
-borg create ::<%= $archive_name %> \
+borg create \
 <% $excludes.each |$pattern| { -%>
   --exclude '<%= $pattern %>' \
 <% } -%>
@@ -63,10 +63,9 @@ borg create ::<%= $archive_name %> \
 <%     }
      } -%>
 <% } -%>
-<% $paths.each |$path| { -%>
-  <%= $path %> \
-<% } -%>
-  ${borg_create_options}
+  ${borg_create_options} \
+  ::<%= $archive_name %> \
+  <%= $paths.join(" \\\n  ") %>
 
 <% if $retention_policy { -%>
 # prune
