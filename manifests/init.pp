@@ -31,7 +31,7 @@ class borgbackup (
     file { $config_dir:
       ensure => 'directory',
       owner  => 'root',
-      group  => 'root',
+      group  => '0',
       before => File[$launcher_dir],
     }
   }

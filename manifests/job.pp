@@ -38,7 +38,7 @@ define borgbackup::job (
 
   file { $launcher_file:
     ensure  => $ensure,
-    group   => 'root',
+    group   => '0',
     mode    => '0550',
     owner   => 'root',
     content => epp('borgbackup/borgbackup_launcher.epp', {
