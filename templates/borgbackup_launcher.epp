@@ -1,4 +1,4 @@
-<%- | $repository, $ssh_identity, $paths, $archive_name, $excludes, $retention_policy, $prune_prefix, $borg_init_options, $borg_create_options, $borg_prune_options | -%>
+<%- | $repository, $ssh_identity, $paths, $archive_name, $excludes, $retention_policy, $prune_pattern, $borg_init_options, $borg_create_options, $borg_prune_options | -%>
 #!/bin/sh
 # 
 # THIS FILE IS MANAGED BY PUPPET. DO NOT MODIFY.
@@ -70,8 +70,8 @@ borg create \
 <% if $retention_policy { -%>
 # prune
 borg prune \
-<% if $prune_prefix { -%>
-  --prefix '<%= $prune_prefix -%>' \
+<% if $prune_pattern { -%>
+  --glob-archives '<%= $prune_pattern -%>' \
 <% } -%>
 <% $retention_policy.each |$keep, $value| { -%>
   --keep-<%= $keep %> '<%= $value -%>' \

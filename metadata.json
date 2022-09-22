@@ -1,6 +1,6 @@
 {
   "name": "oxc-borgbackup",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "oxc",
   "summary": "Installs and manages borgbackup backup system",
   "license": "Apache-2.0",
