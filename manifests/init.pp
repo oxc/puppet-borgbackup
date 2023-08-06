@@ -26,6 +26,13 @@ class borgbackup (
     }
   }
 
+ $launcher_dir = lookup('borgbackup::job::launcher_dir')
+  file { $launcher_dir:
+    ensure  => 'directory',
+    recurse => $purge_unmanaged,
+    purge   => $purge_unmanaged,
+  }
+
   $config_dir = lookup('borgbackup::job::config_dir')
   if ($config_dir) {
     file { $config_dir:
@@ -34,13 +41,6 @@ class borgbackup (
       group  => '0',
       before => File[$launcher_dir],
     }
-  }
-
-  $launcher_dir = lookup('borgbackup::job::launcher_dir')
-  file { $launcher_dir:
-    ensure  => 'directory',
-    recurse => $purge_unmanaged,
-    purge   => $purge_unmanaged,
   }
 
   create_resources('borgbackup::job', $jobs)
